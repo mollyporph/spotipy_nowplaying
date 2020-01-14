@@ -11,12 +11,12 @@ from dbus import DBusException
 from typing import List,Tuple
 
 class SpotifySong:
-    def __init__(self, trackId: str, length: int, artUrl:str, album: str, albumArtist: str, artists: List[str], autoRating: float, discNumber: int, title: str, trackNumber: int, url: str, playbackStatus: str):
+    def __init__(self, trackId: str, length: int, artUrl:str, album: str, albumArtist: List[str], artists: List[str], autoRating: float, discNumber: int, title: str, trackNumber: int, url: str, playbackStatus: str):
         self.trackId: str = trackId
         self.length: int = length
         self.artUrl: str = artUrl
         self.album: str = album
-        self.albumArtist: str = [str(x) for x in albumArtist if albumArtist]
+        self.albumArtist: List[str] = [str(x) for x in albumArtist if albumArtist]
         self.artists: List[str] = [str(x) for x in artists if artists]
         self.autoRating: float = autoRating
         self.discNumber: int = discNumber
