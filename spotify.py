@@ -82,6 +82,7 @@ class DbusAPI:
         return SpotifySong(trackId, length, artUrl, album, albumArtist, artists, autoRating, discNumber, title, trackNumber, url, playback_status)
 
 if __name__ == "__main__":
+# Example usage for i3 bar 
     db_api = DbusAPI()
     res = db_api.get_spotify_now_playing()
     if res.isPlaying:
