@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 
 import os
+import sys
+import logging
+import logging.handlers
+from sys import platform
 
 import dbus
 from dbus import DBusException
@@ -79,13 +83,26 @@ class DbusAPI:
         trackNumber = metadata['xesam:trackNumber']
         url = metadata['xesam:url']
 
-        return SpotifySong(trackId, length, artUrl, album, albumArtist, artists, autoRating, discNumber, title, trackNumber, url, playback_status)
+        return None, SpotifySong(trackId, length, artUrl, album, albumArtist, artists, autoRating, discNumber, title, trackNumber, url, playback_status)
+def get_syslog():
 
+    syslogger = logging.getLogger('SysLogger')
+    syslogger.setLevel(logging.DEBUG)
+
+    if platform == 'linux' or platform == 'linux2':
+        handler = logging.handlers.SysLogHandler(address = '/dev/log')
+    elif platform == 'darwin':
+        handler = logging.handlers.SysLogHandler(address = '/var/run/syslog')
+
+    syslogger.addHandler(handler)
+    return syslogger
 if __name__ == "__main__":
 # Example usage for i3 bar 
+    logger = get_syslog()
     db_api = DbusAPI()
-    res = db_api.get_spotify_now_playing()
+    error, res = db_api.get_spotify_now_playing()
+    if error:
+        logger.error("Spotipy : {}".format(error))
+        sys.exit(1)
     if res.isPlaying:
         print('♫ '+'{} - {}'.format(','.join(res.artists),res.title))
-    else:
-        print('')
